@@ -1,20 +1,70 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <form class="example-form" #form>
+        <mat-form-field class="example-full-width">
+          <label for="week1">Week 1# income</label>
+          <input matInput type="number" id="week1" name="week1" [(ngModel)]="week1" required>
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <label for="week2">Week 2# income</label>
+          <input matInput type="number" id="week2" name="week2" [(ngModel)]="week2" required>
+        </mat-form-field>
+        <button [disabled]="!form.checkValidity()" mat-raised-button type="button" color="primary" (click)="onCalc()">
+        <mat-icon>add</mat-icon>
+        Calculate
+        </button>
+        <hr>
+        <div *ngIf="taxCalculated">
+          <h3>Gross Pay</h3>
+          <button mat-stroked-button color="primary" type="button">{{grossPay}}</button>
+          <h3>PayE</h3>
+          <button mat-stroked-button color="basic" type="button">{{paye}}</button>
+          <h3>PRSI</h3>
+          <button mat-stroked-button color="basic" type="button">{{prsi}}</button>
+          <h3>USC</h3>
+          <button mat-stroked-button color="basic" type="button">{{usc}}</button>
+          <h3>All Tax</h3>
+          <button mat-stroked-button color="warn" type="button">{{taxSum}}</button>
+          <h3>Nett Pay</h3>
+          <button mat-stroked-button color="primary" type="button">{{nettPay}}</button>
+      </div>
+
+      </form>
+      <!--<form>-->
+        <!--<div class="form-group">-->
+          <!--<label for="week1">Week 1# income {{week1}}</label>-->
+          <!--<input class="form-control" type="number" id="week1" name="week1" [(ngModel)]="week1" required>-->
+        <!--</div>-->
+        <!--<div class="form-group">-->
+          <!--<label for="week2">Week 2# income {{week2}}</label>-->
+          <!--<input class="form-control" type="number" id="week2" name="week2" [(ngModel)]="week2" required>-->
+        <!--</div>-->
+        <!--<button mat-raised-button type="button" (click)="onCalc()">-->
+          <!--<mat-icon>add</mat-icon>-->
+          <!--Calculate-->
+        <!--</button>-->
+        <!--<hr>-->
+        <!--<div class="form-group" *ngIf="taxCalculated">-->
+          <!--<button type="button" class="btn btn-success" disabled>Gross Pay<span class="badge">{{ grossPay }}</span></button>-->
+        <!--</div>-->
+        <!--<div class="form-group" *ngIf="taxCalculated">-->
+          <!--<button type="button" class="btn btn-primary">PAYE <span class="badge">{{ paye }}</span></button>-->
+        <!--</div>-->
+        <!--<div class="form-group" *ngIf="taxCalculated">-->
+          <!--<button type="button" class="btn btn-primary">PRSI <span class="badge">{{ prsi }}</span></button>-->
+        <!--</div>-->
+        <!--<div class="form-group" *ngIf="taxCalculated">-->
+          <!--<button type="button" class="btn btn-primary">USC <span class="badge">{{ usc }}</span></button>-->
+        <!--</div>-->
+        <!--<div class="form-group" *ngIf="taxCalculated">-->
+          <!--<button type="button" class="btn btn-warning">All Tax <span class="badge">{{ taxSum }}</span></button>-->
+        <!--</div>-->
+        <!--<div class="form-group" *ngIf="taxCalculated">-->
+          <!--<button type="button" class="btn btn-success">Netto Pay <span class="badge">{{ nettPay }}</span></button>-->
+        <!--</div>-->
+      <!--</form>-->
+    </div>
+  </div>
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
 
