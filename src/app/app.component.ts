@@ -29,7 +29,7 @@ export class AppComponent {
   calcPrsi(amount: number) {
     let result = 0;
     if (amount > 352.01) {
-      result = (amount * 0.04) - (12 - ((amount - 352.01) / 6));
+      result = (amount * 0.042);
     }
     return result.toFixed(2);
   }
