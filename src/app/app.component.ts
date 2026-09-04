@@ -17,10 +17,10 @@ export class AppComponent {
   taxSum: number;
 
   onCalc() {
-    this.grossPay = +(this.week1 + this.week2).toFixed(2);
+    this.grossPay = +(this.week1).toFixed(2);
     this.taxCalculated = true;
-    this.paye = +((this.grossPay * 0.2) - 126.93).toFixed(2);
-    this.prsi = +(+this.calcPrsi(this.week1) + +this.calcPrsi(this.week2)).toFixed(2);
+    this.paye = +((this.grossPay * 0.2) - 76.68).toFixed(2);
+    this.prsi = +this.calcPrsi(this.week1).toFixed(2);
     this.usc = +this.calcUsc(this.grossPay);
     this.taxSum = +(this.paye + this.prsi + this.usc).toFixed(2);
     this.nettPay = +(this.grossPay - this.taxSum).toFixed(2);
@@ -37,9 +37,9 @@ export class AppComponent {
   calcUsc(amount: number) {
     let result = 0;
     const tresholds = [
-      {value: 462, prc: 0.005},
-      {value: 283.07, prc: 0.02},
-      {value: 1948.92, prc: 0.0475}
+      {value: 231, prc: 0.005},
+      {value: 320.93, prc: 0.02},
+      {value: 795.08, prc: 0.03}
       ];
 
     if (amount > tresholds[0].value) {
