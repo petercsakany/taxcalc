@@ -6,10 +6,6 @@
           <label for="week1">Week 1# income</label>
           <input matInput type="number" id="week1" name="week1" [(ngModel)]="week1" required>
         </mat-form-field>
-        <mat-form-field class="example-full-width">
-          <label for="week2">Week 2# income</label>
-          <input matInput type="number" id="week2" name="week2" [(ngModel)]="week2" required>
-        </mat-form-field>
         <button [disabled]="!form.checkValidity()" mat-raised-button type="button" color="primary" (click)="onCalc()">
         <mat-icon>add</mat-icon>
         Calculate
@@ -35,10 +31,6 @@
         <!--<div class="form-group">-->
           <!--<label for="week1">Week 1# income {{week1}}</label>-->
           <!--<input class="form-control" type="number" id="week1" name="week1" [(ngModel)]="week1" required>-->
-        <!--</div>-->
-        <!--<div class="form-group">-->
-          <!--<label for="week2">Week 2# income {{week2}}</label>-->
-          <!--<input class="form-control" type="number" id="week2" name="week2" [(ngModel)]="week2" required>-->
         <!--</div>-->
         <!--<button mat-raised-button type="button" (click)="onCalc()">-->
           <!--<mat-icon>add</mat-icon>-->
