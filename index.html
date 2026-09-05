@@ -2,14 +2,460 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Taxcalc</title>
-  <base href="/">
-
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="/taxcalc/favicon.ico">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<link rel="stylesheet" href="/taxcalc/styles.626179b1c534fc20c24f.css"></head>
+  <title>Irish Weekly Wage Calculator 2026</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f4f6f8;
+      --card: #ffffff;
+      --panel: #eef2f6;
+      --text: #17202a;
+      --muted: #667085;
+      --border: #d9e0e7;
+      --accent: #146c43;
+      --accent-text: #ffffff;
+      --danger: #b42318;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111827;
+        --card: #1f2937;
+        --panel: #273244;
+        --text: #f3f4f6;
+        --muted: #a7b0bf;
+        --border: #3b4658;
+        --accent: #38a169;
+        --accent-text: #ffffff;
+        --danger: #ff8a80;
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .wrap {
+      width: min(920px, calc(100% - 32px));
+      margin: 48px auto;
+    }
+
+    .header {
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin: 0 0 6px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      line-height: 1.1;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin: 10px 0 0;
+      max-width: 700px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .money-input {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 0 14px;
+    }
+
+    .money-input span {
+      font-size: 1.5rem;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--text);
+      padding: 16px 0;
+      font-size: 1.7rem;
+      font-weight: 750;
+      min-width: 0;
+    }
+
+    button {
+      width: 100%;
+      min-height: 48px;
+      border: 0;
+      border-radius: 14px;
+      margin-top: 16px;
+      background: var(--accent);
+      color: var(--accent-text);
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    button:hover { filter: brightness(0.95); }
+
+    button:focus-visible,
+    input:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--accent) 55%, transparent);
+      outline-offset: 2px;
+    }
+
+    .validation {
+      min-height: 24px;
+      margin: 8px 0 0;
+      color: var(--danger);
+      font-size: 0.9rem;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 18px;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+
+    .hero {
+      text-align: center;
+      background: var(--panel);
+      border-radius: 16px;
+      padding: 22px;
+      margin-bottom: 16px;
+    }
+
+    .hero .label {
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .hero .value {
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      font-weight: 850;
+      letter-spacing: -0.03em;
+      margin-top: 6px;
+    }
+
+    .hero .sub {
+      color: var(--muted);
+      margin-top: 6px;
+      font-size: 0.92rem;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .row:last-of-type { border-bottom: 0; }
+
+    .row .name {
+      font-weight: 800;
+    }
+
+    .row .desc {
+      color: var(--muted);
+      font-size: 0.86rem;
+      margin-top: 2px;
+    }
+
+    .row .amount {
+      font-size: 1.08rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .summary {
+      background: var(--panel);
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 14px;
+    }
+
+    .summary-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      margin: 6px 0;
+    }
+
+    .summary-line.total {
+      font-weight: 850;
+      margin-top: 10px;
+    }
+
+    footer {
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin-top: 18px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 720px) {
+      .wrap {
+        width: min(100% - 22px, 920px);
+        margin: 24px auto;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
 <body>
-  <app-root></app-root>
-<script type="text/javascript" src="/taxcalc/runtime.a66f828dca56eeb90e02.js"></script><script type="text/javascript" src="/taxcalc/polyfills.7a0e6866a34e280f48e7.js"></script><script type="text/javascript" src="/taxcalc/main.2566d9d0a0fefc42c29b.js"></script></body>
+  <main class="wrap">
+    <header class="header">
+      <p class="eyebrow">2026 Irish weekly payroll estimate</p>
+      <h1>Weekly Wage Calculator</h1>
+      <p class="subtitle">
+        Enter your gross weekly pay to estimate PAYE, PRSI, USC and take-home pay.
+      </p>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <form id="wageForm">
+          <label for="grossWage">Gross weekly wage</label>
+          <div class="money-input">
+            <span>€</span>
+            <input id="grossWage" type="number" min="0" max="100000" step="0.01" value="878" inputmode="decimal">
+          </div>
+
+          <p id="validation" class="validation" aria-live="polite"></p>
+
+          <button type="submit">Calculate take-home pay</button>
+        </form>
+      </section>
+
+      <section class="card" aria-live="polite">
+        <div class="hero">
+          <div class="label">Estimated take-home pay</div>
+          <div id="netPay" class="value">€718.72</div>
+          <div id="netPercent" class="sub">81.9% of gross pay</div>
+        </div>
+
+        <div class="row">
+          <div>
+            <div class="name">PAYE</div>
+            <div class="desc">Income tax</div>
+          </div>
+          <div id="paye" class="amount">€105.04</div>
+        </div>
+
+        <div class="row">
+          <div>
+            <div class="name">PRSI</div>
+            <div class="desc">Class A employee</div>
+          </div>
+          <div id="prsi" class="amount">€36.88</div>
+        </div>
+
+        <div class="row">
+          <div>
+            <div class="name">USC</div>
+            <div class="desc">Universal Social Charge</div>
+          </div>
+          <div id="usc" class="amount">€17.36</div>
+        </div>
+
+        <div class="row">
+          <div>
+            <div class="name">MFF</div>
+            <div class="desc">My Future Fund</div>
+          </div>
+          <div id="mff" class="amount">€17.36</div>
+        </div>
+
+        <div class="summary">
+          <div class="summary-line">
+            <span>Gross pay</span>
+            <span id="grossResult">€878.00</span>
+          </div>
+          <div class="summary-line total">
+            <span>Total deductions</span>
+            <span id="totalTax">€159.28</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      Estimate only. Your actual payslip may differ due to cumulative Revenue calculations,
+      pension deductions, benefits, emergency tax, or a different Revenue Payroll Notification.
+    </footer>
+  </main>
+
+  <script>
+    (() => {
+      const form = document.getElementById('wageForm');
+      const input = document.getElementById('grossWage');
+      const validation = document.getElementById('validation');
+      const payeEl = document.getElementById('paye');
+      const mffEl = document.getElementById('mff');
+      const prsiEl = document.getElementById('prsi');
+      const uscEl = document.getElementById('usc');
+      const totalEl = document.getElementById('totalTax');
+      const netEl = document.getElementById('netPay');
+      const percentEl = document.getElementById('netPercent');
+      const grossEl = document.getElementById('grossResult');
+      const prsiNote = document.getElementById('prsiNote');
+
+      const money = new Intl.NumberFormat('en-IE', {
+        style: 'currency',
+        currency: 'EUR',
+        minimumFractionDigits: 2
+      });
+
+      function prsiRateForToday() {
+        const now = new Date();
+        const change = new Date(2026, 9, 1);
+        return now >= change ? 0.0435 : 0.042;
+      }
+
+      function calcPaye(amount) {
+        const weeklyTaxCredit = 76.68;
+        const standardRateBand = 846.16;
+
+        const grossTax = amount <= standardRateBand
+          ? amount * 0.20
+          : standardRateBand * 0.20 + (amount - standardRateBand) * 0.40;
+
+        return Math.max(0, grossTax - weeklyTaxCredit);
+      }
+      
+      function calcMyFutureFund(amount) {
+        return amount * 0.015;
+      }
+
+      function calcPrsi(amount) {
+        if (amount <= 352) return 0;
+
+        const rate = prsiRateForToday();
+        let charge = amount * rate;
+
+        if (amount <= 424) {
+          const taperedCredit = Math.max(0, 12 - ((amount - 352) / 6));
+          charge = Math.max(0, charge - taperedCredit);
+        }
+
+        return charge;
+      }
+
+      function calcUsc(amount) {
+        const band1 = 231.00;
+        const band2 = 551.92;
+        const band3 = 1347.00;
+
+        if (amount <= band1) {
+          return amount * 0.005;
+        }
+
+        if (amount <= band2) {
+          return band1 * 0.005
+            + (amount - band1) * 0.02;
+        }
+
+        if (amount <= band3) {
+          return band1 * 0.005
+            + (band2 - band1) * 0.02
+            + (amount - band2) * 0.03;
+        }
+
+        return band1 * 0.005
+          + (band2 - band1) * 0.02
+          + (band3 - band2) * 0.03
+          + (amount - band3) * 0.08;
+      }
+
+      function calculate() {
+        const amount = Number(input.value);
+
+        if (!Number.isFinite(amount) || amount < 0 || amount > 100000) {
+          validation.textContent = 'Please enter a valid weekly gross wage.';
+          return;
+        }
+
+        validation.textContent = '';
+
+        const paye = calcPaye(amount);
+        const mff = calcMyFutureFund(amount)
+        const prsi = calcPrsi(amount);
+        const usc = calcUsc(amount);
+        const total = paye + prsi + usc + mff;
+        const net = Math.max(0, amount - total);
+        const percentage = amount > 0 ? (net / amount) * 100 : 0;
+
+        grossEl.textContent = money.format(amount);
+        payeEl.textContent = money.format(paye);
+        mffEl.textContent = money.format(mff);
+        prsiEl.textContent = money.format(prsi);
+        uscEl.textContent = money.format(usc);
+        totalEl.textContent = money.format(total);
+        netEl.textContent = money.format(net);
+        percentEl.textContent = amount > 0
+          ? percentage.toFixed(1) + '% of gross pay'
+          : '0% of gross pay';
+      }
+
+      const rate = prsiRateForToday();
+      prsiNote.textContent =
+        'PRSI rate currently used: ' +
+        (rate * 100).toFixed(2).replace(/0$/, '') +
+        '%. The 2026 Class A employee rate changes from 4.2% to 4.35% on 1 October 2026.';
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        calculate();
+      });
+
+      calculate();
+    })();
+  </script>
+</body>
 </html>
