@@ -260,7 +260,7 @@
 
     <div class="grid">
       <section class="card">
-        <form id="wageForm">
+        <div id="wageCalculator">
           <label for="grossWage">Gross weekly wage</label>
           <div class="money-input">
             <span>€</span>
@@ -269,8 +269,14 @@
 
           <p id="validation" class="validation" aria-live="polite"></p>
 
-          <button type="submit">Calculate take-home pay</button>
-        </form>
+          <button id="calculateButton" type="button">Calculate take-home pay</button>
+        </div>
+
+        <div class="note">
+          <strong>Assumptions:</strong> standard single PAYE employee, €76.93 weekly tax credits,
+          €846.16 weekly 20% rate band, and Class A employee PRSI.
+          <div id="prsiNote" style="margin-top:8px;"></div>
+        </div>
       </section>
 
       <section class="card" aria-live="polite">
@@ -304,14 +310,6 @@
           <div id="usc" class="amount">€17.36</div>
         </div>
 
-        <div class="row">
-          <div>
-            <div class="name">MFF</div>
-            <div class="desc">My Future Fund</div>
-          </div>
-          <div id="mff" class="amount">€17.36</div>
-        </div>
-
         <div class="summary">
           <div class="summary-line">
             <span>Gross pay</span>
@@ -333,11 +331,10 @@
 
   <script>
     (() => {
-      const form = document.getElementById('wageForm');
+      const button = document.getElementById('calculateButton');
       const input = document.getElementById('grossWage');
       const validation = document.getElementById('validation');
       const payeEl = document.getElementById('paye');
-      const mffEl = document.getElementById('mff');
       const prsiEl = document.getElementById('prsi');
       const uscEl = document.getElementById('usc');
       const totalEl = document.getElementById('totalTax');
@@ -359,7 +356,7 @@
       }
 
       function calcPaye(amount) {
-        const weeklyTaxCredit = 76.68;
+        const weeklyTaxCredit = 76.93;
         const standardRateBand = 846.16;
 
         const grossTax = amount <= standardRateBand
@@ -367,10 +364,6 @@
           : standardRateBand * 0.20 + (amount - standardRateBand) * 0.40;
 
         return Math.max(0, grossTax - weeklyTaxCredit);
-      }
-      
-      function calcMyFutureFund(amount) {
-        return amount * 0.015;
       }
 
       function calcPrsi(amount) {
@@ -424,16 +417,14 @@
         validation.textContent = '';
 
         const paye = calcPaye(amount);
-        const mff = calcMyFutureFund(amount)
         const prsi = calcPrsi(amount);
         const usc = calcUsc(amount);
-        const total = paye + prsi + usc + mff;
+        const total = paye + prsi + usc;
         const net = Math.max(0, amount - total);
         const percentage = amount > 0 ? (net / amount) * 100 : 0;
 
         grossEl.textContent = money.format(amount);
         payeEl.textContent = money.format(paye);
-        mffEl.textContent = money.format(mff);
         prsiEl.textContent = money.format(prsi);
         uscEl.textContent = money.format(usc);
         totalEl.textContent = money.format(total);
@@ -449,9 +440,13 @@
         (rate * 100).toFixed(2).replace(/0$/, '') +
         '%. The 2026 Class A employee rate changes from 4.2% to 4.35% on 1 October 2026.';
 
-      form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        calculate();
+      button.addEventListener('click', calculate);
+
+      input.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          calculate();
+        }
       });
 
       calculate();
